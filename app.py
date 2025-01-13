@@ -33,7 +33,7 @@ def read_root():
 def predict_price(commodity_val: str):
     try:
         # Decode the commodity value
-        commodity_val = unquote(commodity_val)
+        commodity_val = unquote(commodity_val).lower()
         
         # Debugging: Log the commodity being processed
         print(f"Received request for commodity: {commodity_val}")

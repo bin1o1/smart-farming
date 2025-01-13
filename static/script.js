@@ -10,15 +10,17 @@ async function searchCommodityPrice() {
     const commodity = document.getElementById('commodity-search').value.trim();
     const pricePredictionSection = document.getElementById('price-prediction');
     const priceList = document.getElementById('price-list');
-    
+    const pricePredictionTitle = document.getElementById('price-prediction-title')
     // Check if commodity search is empty
     if (!commodity) {
+        pricePredictionSection.style.display = 'none'
         alert('Please enter a commodity name!');
         return;
     }
 
     // Show the price prediction section
     pricePredictionSection.style.display = 'block';
+    pricePredictionTitle.textContent = `Predicted prices of ${commodity} for the next 3 days:`
     
     // Clear any previous predictions
     priceList.innerHTML = '';
@@ -33,6 +35,8 @@ async function searchCommodityPrice() {
         // Log the response status for debugging
         console.log('Response status:', response.status);
         if (!response.ok) {
+            pricePredictionTitle.textContent = 'No such commodity!'
+            pricePredictionSection.style.display = 'block'
             throw new Error('Commodity not found');
         }
 
