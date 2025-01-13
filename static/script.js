@@ -28,7 +28,7 @@ async function searchCommodityPrice() {
         console.log('Fetching data for:', commodity);
 
         // Make the API call to get the predicted prices (encode the commodity name)
-        const response = await fetch(`http://127.0.0.1:8000/predict/${encodeURIComponent(commodity)}`);
+        const response = await fetch(`https://smart-farming-dashboard.azurewebsites.net/predict/${encodeURIComponent(commodity)}`);
         
         // Log the response status for debugging
         console.log('Response status:', response.status);
