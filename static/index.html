@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Farming Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Smart Farming Dashboard</h1>
+        </header>
+        
+        <div class="dashboard">
+            <div class="section">
+                <h2>Current Environment</h2>
+                <p><strong>Temperature:</strong> <span id="temperature">--°C</span></p>
+                <p><strong>Humidity:</strong> <span id="humidity">--%</span></p>
+                <button id="update-environment-btn">Update Environment</button>
+            </div>
+            
+            <div class="section">
+                <h2>Commodity Price Prediction</h2>
+                <input type="text" id="commodity-search" placeholder="Enter commodity name">
+                <button id="search-btn">Predict Price</button>
+                <div id="price-prediction" style="display: none;">
+                    <h3>Predicted Price for Next 3 Days:</h3>
+                    <ul id="price-list">
+                        <!-- Predictions will appear here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/script.js"></script>
+</body>
+</html>
