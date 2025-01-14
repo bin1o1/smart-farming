@@ -35,9 +35,7 @@ async function searchCommodityPrice() {
         // Log the response status for debugging
         console.log('Response status:', response.status);
         if (!response.ok) {
-            pricePredictionTitle.textContent = 'No such commodity!'
-            pricePredictionSection.style.display = 'block'
-            throw new Error('Commodity not found');
+            throw new Error('Commodity not found!');
         }
 
         const data = await response.json();
@@ -55,8 +53,8 @@ async function searchCommodityPrice() {
         });
     } catch (error) {
         // Log the error for debugging
-        console.error('Error fetching data:', error);
-        alert(error.message);
+        // alert(error.message);
+        pricePredictionTitle.textContent = error.message
     }
 }
 
