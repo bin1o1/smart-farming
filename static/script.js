@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Websocket for controlling of motors and stuff
 
-    let ws = new WebSocket("ws://smart-farming-dashboard.azurewebsites.net//ws")
+    let ws = new WebSocket("ws://smart-farming-dashboard.azurewebsites.net/ws")
 
     ws.onmessage = function(event)
     {
