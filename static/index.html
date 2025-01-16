@@ -31,7 +31,50 @@
                 !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
                 </script>
             </div>
-            <div class="section">
+            <!-- not the problem -->
+            <div class="section" id="greenhouse-controls">
+                <h2><i class="fa-solid fa-tools"></i> Farm Controls</h2>
+                <div class="control-switches">
+                    <div class="control-item">
+                        <label class="switch">
+                            <input type="checkbox" id="pump-switch">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="label-text"><i class="fas fa-pump-soap"></i> Pump</span>
+                    </div>
+                    <div class="control-item">
+                        <label class="switch">
+                            <input type="checkbox" id="heater-switch">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="label-text"><i class="fas fa-temperature-high"></i> Heater</span>
+                    </div>
+                    <div class="control-item">
+                        <label class="switch">
+                            <input type="checkbox" id="vent-switch">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="label-text"><i class="fas fa-wind"> </i>Vent</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Not the probelm -->
+            <div class="section" id="current-crops">
+                <h2><i class="fas fa-leaf"></i> Current Crops</h2>
+                <ul id="crops-list">
+                    <!-- List of crops will be added here -->
+                </ul>
+            </div>
+            <div class="section" id="add-crop">
+                <h2><i class="fa-solid fa-seedling"></i> Add a New Crop</h2>
+                <form id="add-crop-form">
+                    <input type="text" id="crop-name" placeholder="Crop Name" required>
+                    <input type="date" id="planting-date" placeholder="Planting Date" required>
+                    <input type="number" id="harvest-duration" placeholder="Harvest Duration (days)" required>
+                    <button type="submit">Add Crop</button>
+                </form>
+            </div>
+            <div class="section" id="best-price-suggestor">
                 <h2><i class="fa-solid fa-indian-rupee-sign"></i> Best Price Suggestor</h2>
                 <div class="search-container">
                     <input type="text" id="commodity-search" placeholder="Enter commodity name">

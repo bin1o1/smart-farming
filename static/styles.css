@@ -1,9 +1,12 @@
+/* Reseting all the marginis */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
 }
+
+/* ///////////Whole body//////////// */
 
 body {
     background-color: #c9ecd3;
@@ -12,10 +15,14 @@ body {
     font-size: 16px;
 }
 
+/*//////////Div which contains everything//////////  */
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
 }
+
+/* ///////////Smart farming dashboard//////////// */
 
 header {
     background: linear-gradient(135deg, #358855, #18a138);
@@ -52,6 +59,7 @@ header h1 i:hover {
     }
 }
 
+/* ////////////////////Div containing everything except header//////////////////// */
 
 .dashboard {
     display: flex;
@@ -59,6 +67,8 @@ header h1 i:hover {
     gap: 20px;
     flex-wrap: wrap;
 }
+
+/* /////////////Current env and greenhouse-controls////////////// */
 
 .section {
     background-color: #ffffff;
@@ -70,6 +80,8 @@ header h1 i:hover {
     justify-content: center;
     transition: transform 0.3s ease-in-out;
 }
+
+/* /////////Section Divs and section contents////////////// */
 
 .section .content {
     display: flex;
@@ -97,7 +109,7 @@ p {
     margin: 10px 0;
 }
 
-input[type="text"] {
+input[type="text"],input[type="number"],input[type="date"] {
     width: 100%;
     padding: 12px;
     font-size: 1em;
@@ -202,17 +214,135 @@ button:hover {
     }
 }
 
-.weather-widget {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    flex: 1; 
-    min-width: 48%; 
-    margin-bottom: 20px;
-}
-
 .weather-widget h2 {
     font-size: 1.8em;
     color: #333;
     margin-bottom: 20px;
+}
+
+#best-price-suggestor{
+    width: 100%;
+}
+
+/* ////////////////////////////////Farm controls///////////////////////////// */
+.control-switches {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+/* Each individual control switch item */
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* The switch - the actual button */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide the default checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Slider/Background of the switch */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+/* The round circle inside the switch */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    border-radius: 50%;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+/* When the checkbox is checked, move the slider to the right */
+input:checked + .slider {
+    background-color: #28a745; /* Green background for "On" */
+}
+
+/* The circle inside the switch moves to the right */
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Label for each switch */
+.label-text {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    text-transform: capitalize;
+}
+
+/* When hovering over the switch */
+.switch:hover .slider {
+    opacity: 0.8;
+}
+
+/* /////////////////////////////Current crops section///////////////////////////////// */
+
+#current-crops, #add-crop {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#crops-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#crops-list li {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#crops-list li:nth-child(odd) {
+    background-color: #e9f7ef;
+}
+
+/* Add a new crop form styles */
+#add-crop-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#add-crop-form input {
+    margin-bottom: 10px;
+}
+
+#add-crop-form button {
+    background-color: #007bff;
+}
+
+#add-crop-form button:hover {
+    background-color: #0056b3;
 }
