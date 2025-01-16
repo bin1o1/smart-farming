@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +10,11 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")   #makes the static folder available for the app.
+
+@app.get("/")
+def read_root():
+    return FileResponse("static/index.html")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,12 +22,13 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
+)       #allows requests from all origins
 
+#/////////////////////////////////For Crop tracking system///////////////////////////////////////////////////////////
 class Crop(BaseModel):
     name: str
     planting_date: str
-    harvest_duration: int
+    harvest_duration: int       
 
 def load_crop_data():
     try:
@@ -53,16 +58,28 @@ def update_days_remaining():
     crop_data['Days Remaining'] = crop_data['Harvest Date'].apply(lambda x: (datetime.strptime(x, "%Y-%m-%d") - datetime.now()).days)
     crop_data.to_csv('crops_data.csv', index=False)
 
+@app.post("/add_crop/")
+async def add_crop(crop: Crop):
+    try:
+        add_crop_to_csv(crop.name, crop.planting_date, crop.harvest_duration)
+        return {"message": "Crop added successfully!"}
+    except Exception as e:
+        return {"error": str(e)}
 
-# Load data
-data = pd.read_csv('final_data2.csv')
+@app.get("/get_crops/")
+async def get_crops():
+    update_days_remaining()
+    crop_data = load_crop_data()
+    return {"crops": crop_data.to_dict(orient="records")}
 
-@app.get("/")
-def read_root():
-    return FileResponse("static/index.html")
+# ///////////////////////////////For price prediction system////////////////////////////////////////////////////////////////////
+
+def read_price_data():
+    return pd.read_csv('final_data2.csv')
 
 @app.get("/predict/{commodity_val}")
 def predict_price(commodity_val: str):
+    data = read_price_data()
     try:
         commodity_val = unquote(commodity_val).lower()
         
@@ -104,22 +121,25 @@ def predict_price(commodity_val: str):
         print(f"Error occurred: {e}")
         raise HTTPException(status_code=500, detail="An internal server error occurred")
 
+#///////////////////////////////////For switches////////////////////////////////
+connected_clients = []
 
-@app.post("/add_crop/")
-async def add_crop(crop: Crop):
+@app.websocket("/ws")
+async def websocket_endpoint(websocket:WebSocket):
+    await websocket.accept()
+    connected_clients.append(websocket)
+
     try:
-        add_crop_to_csv(crop.name, crop.planting_date, crop.harvest_duration)
-        return {"message": "Crop added successfully!"}
-    except Exception as e:
-        return {"error": str(e)}
+        while True:
+            data = await websocket.receive_text()
+            print(f"Recieved: {data}")
 
-@app.get("/get_crops/")
-async def get_crops():
-    update_days_remaining()
-    crop_data = load_crop_data()
-    return {"crops": crop_data.to_dict(orient="records")}
+            for client in connected_clients:
+                await client.send_text(data)
+    except WebSocketDisconnect:
+        connected_clients.remove(websocket)
+        print("Client disconnected!")
 
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000)

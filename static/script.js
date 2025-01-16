@@ -107,3 +107,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 });
+
+// Websocket for controlling of motors and stuff
+
+    let ws = new WebSocket("ws://smart-farming-dashboard.azurewebsites.net//ws")
+
+    ws.onmessage = function(event)
+    {
+        alert("ESP32 says: " + event.data)
+    };
+
+    function toggleDevice(device, checkbox)
+    {
+        let message = checkbox.checked ? `${device}_ON`: `${device}_OFF`;
+        ws.send(message);
+    }
