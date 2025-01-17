@@ -10,13 +10,15 @@
 
 </head>
 <body>
-    <div class="container">
+    <div class="container">     <!-- container for all the items in the html -->
+
         <header>
             <h1> Smart Farming Dashboard</h1>
         </header>
         
-        <div class="dashboard">
-            <div class="section">
+        <div class="dashboard">         <!-- dashboard, conntainer for all the items except the header -->
+
+            <div class="section">       <!-- section container for current environment -->
                 <h2><i class="fa-solid fa-tree"></i> Current Environment</h2>
                 <div class="content">
                     <p><strong><i class="fas fa-thermometer-half"></i> Temperature:</strong> <span id="temperature">--°C</span></p>
@@ -24,7 +26,8 @@
                     <button id="update-environment-btn">Update Environment</button>
                 </div>
             </div>
-            <div class="section weather-widget">
+            
+            <div class="section weather-widget">        <!-- section container for weather forecast -->
                 <h2><i class="fas fa-cloud-sun"></i> Weather Forecast</h2>
                 <a class="weatherwidget-io" href="https://forecast7.com/en/27d6685d32/patan/" data-label_1="LALITPUR" data-label_2="Nepal" data-font="Ubuntu" data-icons="Climacons Animated" data-mode="Forecast" data-days="5" data-theme="pure" >LALITPUR Nepal</a>
                 <script>
@@ -57,25 +60,77 @@
                         <span class="label-text"><i class="fas fa-wind"> </i>Vent</span>
                     </div>
                 </div>
+                
+                <div class="control-switches">
+                    <div class="control-item">
+                        <label class="switch">
+                            <input type="checkbox" id="nitrogen-switch" onchange="toggleDevice('NITROGEN', this)">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="label-text"><i class="fas fa-leaf"></i> Nitrogen (N)</span>
+                    </div>
+                    <div class="control-item">
+                        <label class="switch">
+                            <input type="checkbox" id="phosphorus-switch" onchange="toggleDevice('PHOSPHORUS', this)">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="label-text"><i class="fas fa-leaf"></i> Phosphorus (P)</span>
+                    </div>
+                    <div class="control-item">
+                        <label class="switch">
+                            <input type="checkbox" id="potassium-switch" onchange="toggleDevice('POTASSIUM', this)">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="label-text"><i class="fas fa-leaf"></i> Potassium (K)</span>
+                    </div>
+                </div>
+                
+                <div class="camera-angle-control">      <!-- Camera Angle Control with Radio Buttons -->
+                    <label for="camera-angle-mode"><h3>Camera Angle Mode</h3></label>
+                    <div class="camera-angle-mode">
+                        <input type="radio" id="auto-mode" name="camera-angle-mode" value="automatic" checked onclick="toggleCameraAngleSlider('auto')">
+                        <label for="auto-mode">Automatic</label>
+                        <input type="radio" id="manual-mode" name="camera-angle-mode" value="manual" onclick="toggleCameraAngleSlider('manual')">
+                        <label for="manual-mode">Manual</label>
+                    </div>
+                    
+                    <div id="camera-angle-slider-container" style="display: none; margin-top: 25px;">
+                        <label for="camera-angle-slider">
+                            <span class="label-text"><i class="fas fa-camera"></i> Camera Angle</span>
+                        </label>
+                        <input 
+                            type="range" 
+                            id="camera-angle-slider" 
+                            min="0" 
+                            max="180" 
+                            value="90" 
+                            step="1" 
+                            oninput="adjustCameraAngle(this.value)" 
+                        >
+                        <span id="camera-angle-display">90°</span> <!-- Display for current angle -->
+                    </div>
+                </div>
+
             </div>
             
-            <div id="device-status" style="display: none; margin-top: 20px;">
+            <div id="device-status" style="display: none; margin-top: 20px;">           <!-- Container for device's present status. Is invisible at first, only visible after toggles-->
                 <h2><i class="fa-solid fa-plug"></i> Device status:</h2>
                 <ul id="device-status-list"></ul>
             </div>
             
-            <div id="device-history" style="display: none; margin-top: 20px;">
-                <h2><i class="fa-solid fa-clock"></i> Device Control History</h2>
+            <div id="device-history" style="display: none; margin-top: 20px;">          <!-- Container for device control history. Invisible at first, visible after toggle. -->
+                <h2><i class="fa-solid fa-clock"></i> Farm Control History</h2>
                 <ol id="device-history-list"></ol>
             </div>
 
-            <div class="section" id="current-crops">
+            <div class="section" id="current-crops">            <!-- Container for current crops section -->
                 <h2><i class="fas fa-leaf"></i> Current Crops</h2>
                 <ul id="crops-list">
-                    <!-- List of crops will be added here -->
+                    <!-- Crop list to be added here -->
                 </ul>
             </div>
-            <div class="section" id="add-crop">
+
+            <div class="section" id="add-crop">     <!-- section container for adding crops section-->
                 <h2><i class="fa-solid fa-seedling"></i> Add a New Crop</h2>
                 <form id="add-crop-form">
                     <input type="text" id="crop-name" placeholder="Crop Name" required>
@@ -84,7 +139,8 @@
                     <button type="submit">Add Crop</button>
                 </form>
             </div>
-            <div class="section" id="best-price-suggestor">
+
+            <div class="section" id="best-price-suggestor">         <!-- section container for best price predictor.-->
                 <h2><i class="fa-solid fa-indian-rupee-sign"></i> Best Price Suggestor</h2>
                 <div class="search-container">
                     <input type="text" id="commodity-search" placeholder="Enter commodity name">

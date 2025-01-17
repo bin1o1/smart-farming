@@ -1,61 +1,65 @@
-function updateEnvironment() {
+function updateEnvironment() {          //update environment function 
     document.getElementById('temperature').textContent = `28°C`;
     document.getElementById('humidity').textContent = `65%`;
 }
 
-async function searchCommodityPrice() {
-    const commodity = document.getElementById('commodity-search').value.trim();
-    const pricePredictionSection = document.getElementById('price-prediction');
-    const priceList = document.getElementById('price-list');
-    const pricePredictionTitle = document.getElementById('price-prediction-title')
+async function searchCommodityPrice() {         //function to predict price. asynchronous to prevent lagging in the website. Rest of the code still runs while this executes.
+    const commodity = document.getElementById('commodity-search').value.trim();     //trims the input given in the search for commodity price searchbar
+    const pricePredictionSection = document.getElementById('price-prediction');     //priceprediction section to unhide it later
+    const priceList = document.getElementById('price-list');            //price-list section to append data to it 
+    const pricePredictionTitle = document.getElementById('price-prediction-title')      //priceprediction-title tag to change its text later
 
-    if (!commodity) {
-        pricePredictionSection.style.display = 'none'
-        alert('Please enter a commodity name!');
-        return;
+    if (!commodity) {       //if there's nothing in the input
+        pricePredictionSection.style.display = 'none'       //price prediction section is made invisible
+        alert('Please enter a commodity name!');        
+        return;     //returns without executing rest of the function
     }
 
-    pricePredictionSection.style.display = 'block';
-    pricePredictionTitle.textContent = `Predicted prices of ${commodity} for the next 3 days:`
-    
-    priceList.innerHTML = '';
+    pricePredictionSection.style.display = 'block';         //if not empty, the price prediction section is made visible
+    pricePredictionTitle.textContent = `Predicted prices of ${commodity} for the next 3 days:`     
+
+    priceList.innerHTML = '';       //resets the contents of the pricelist element
 
     try {
         
         console.log('Fetching data for:', commodity);
 
-        const response = await fetch(`https://smart-farming-dashboard.azurewebsites.net/predict/${encodeURIComponent(commodity)}`);
+        const response = await fetch(`https://smart-farming-dashboard.azurewebsites.net/predict/${encodeURIComponent(commodity)}`);         //waits for the response from the server. await keyword pauses function execution until a response is received
         
         console.log('Response status:', response.status);
-        if (!response.ok) {
-            throw new Error('Commodity not found!');
+
+        if (!response.ok) {     //if response is not okay, 
+            throw new Error('Commodity not found!');        
         }
 
-        const data = await response.json();
+        const data = await response.json();     //data = response provided by the server parsed into a jsObject
 
-        const dates = Object.keys(data);
-        const prices = Object.values(data);
+        const dates = Object.keys(data);        //dates are the keys in the data variable
+        const prices = Object.values(data);     //prices are the values in the data variable
         
-        dates.forEach((date, index) => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<strong>${date}:</strong> Rs.${prices[index].toFixed(2)} per kg`;
-            priceList.appendChild(listItem);
+        dates.forEach((date, index) => {        //for each item in the date list (+ index of that date)
+            const listItem = document.createElement('li');      //creates a new list iten
+            listItem.innerHTML = `<strong>${date}:</strong> Rs.${prices[index].toFixed(2)} per kg`;     //sets the innerHTML of the listitem into the given string
+            priceList.appendChild(listItem);        //appends the created list item to the pricelist
         });
+
     } catch (error) {
+
         // Log the error for debugging
         // alert(error.message);
-        pricePredictionTitle.textContent = error.message
+
+        pricePredictionTitle.textContent = error.message        //if there's any error, the price predicitiontitle's text content will show the error message instead of "predicted prices for ..."
     }
 }
 
-document.getElementById('update-environment-btn').addEventListener('click', updateEnvironment);
-document.getElementById('search-btn').addEventListener('click', searchCommodityPrice);
+document.getElementById('update-environment-btn').addEventListener('click', updateEnvironment);     //checks for click on the updateenv button and triggers the updateEnvironment function if clicked
+document.getElementById('search-btn').addEventListener('click', searchCommodityPrice);          
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Function to fetch and display the current crops
-    async function loadCrops() {
-        const response = await fetch('https://smart-farming-dashboard.azurewebsites.net/get_crops/');
+document.addEventListener("DOMContentLoaded", function () {     //code inside this eventlistener only runs after the whole HTML document has been loaded.
+    
+    async function loadCrops() {        //async function to load crops
+        const response = await fetch('https://smart-farming-dashboard.azurewebsites.net/get_crops/');       //fetches the crops planted from the server
         const data = await response.json();
         const cropsList = document.getElementById("crops-list");
         cropsList.innerHTML = ""; // Clear the list before adding new crops
@@ -66,105 +70,99 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Function to add a new crop
     document.getElementById("add-crop-form").addEventListener("submit", async function (event) {
+    //function to add a new crop after submission. 
+    //the event listener triggers async function (need to data from server for this function)
+    //the whole function has been given as parameter to addEventListener() here.
+        
         event.preventDefault(); // Prevent form submission
 
-        const cropName = document.getElementById("crop-name").value;
-        const plantingDate = document.getElementById("planting-date").value;
-        const harvestDuration = document.getElementById("harvest-duration").value;
+        const cropName = document.getElementById("crop-name").value;        //cropname entered
+        const plantingDate = document.getElementById("planting-date").value;        //planting date entered
+        const harvestDuration = document.getElementById("harvest-duration").value;      //harvestduration entered
 
-        // Send POST request to add the new crop
+        // Send POST request to the server to add the new crop
         const response = await fetch('https://smart-farming-dashboard.azurewebsites.net/add_crop/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json'      //tells the server that the body is in JSON
             },
-            body: JSON.stringify({
+            body: JSON.stringify({      //converts the data into a JSON string
                 name: cropName,
                 planting_date: plantingDate,
                 harvest_duration: parseInt(harvestDuration)
             })
         });
 
-        const result = await response.json();
+        const result = await response.json();       //parsed JSON response from the server 
 
-        if (result.message) {
-            // alert(result.message);
+        if (result.message) {       
+            alert(result.message);
             loadCrops(); // Reload the crops list after adding a new crop
         } else {
             alert("Error: " + result.error);
         }
 
         // Clear form fields
-        document.getElementById("crop-name").value = '';
+        document.getElementById("crop-name").value = '';        //fields for input are reset.
         document.getElementById("planting-date").value = '';
         document.getElementById("harvest-duration").value = '';
     });
 
-    // Load crops when the page is loaded
-    loadCrops();
-
+    loadCrops();        // Load crops when the page is loaded
 
 });
 
-// Websocket for controlling of motors and stuff
-let ws = new WebSocket("wss://smart-farming-dashboard.azurewebsites.net/ws");
 
-// WebSocket message handling
+let ws = new WebSocket("wss://smart-farming-dashboard.azurewebsites.net/ws");       //establishes a websocket connection to the server
+
 ws.onmessage = function(event) {
-    console.log("ESP32 says: " + event.data);
+    console.log("ESP32 says: " + event.data);       //logging recieved messages from the websocket server
+    //these logs can be viewed in website's developer tools 
 };
 
-// Store timers and intervals
+// to store the timers and intervals for the devices
 const autoOffTimers = {};
 const countdownIntervals = {};
 
-// Function to toggle devices
-function toggleDevice(device, checkbox) {
-    let message = checkbox.checked ? `${device}_ON` : `${device}_OFF`;
+function toggleDevice(device, checkbox) {       // Function to toggle devices
+    let message = checkbox.checked ? `${device}_ON` : `${device}_OFF`;      //stores {device}_ON or _OFF in message acc to slider
     console.log(message);
 
     const statusList = document.getElementById('device-status-list'); // Device status updates container
     const deviceStatus = document.getElementById('device-status'); // Device status section
     const deviceHistoryList = document.getElementById('device-history-list'); // History list
 
-    // Show the device-status container if a device is toggled on
-    deviceStatus.style.display = 'block';
+    deviceStatus.style.display = 'block';       // shows the device-status container if a device is toggled on
 
-    if (checkbox.checked) {
-        // Create a unique identifier for the device
-        const deviceId = `device-${device}`;
+    if (checkbox.checked) {         
+        const deviceId = `device-${device}`;        // Create a unique identifier for the device
 
-        // Check if the device is already in the list
-        if (!document.getElementById(deviceId)) {
-            // Create a new list item for the device
-            const listItem = document.createElement('li');
+        
+        if (!document.getElementById(deviceId)) {           // Check if the device is already in the list
+            
+            const listItem = document.createElement('li');      // Create a new list item for the device
             listItem.id = deviceId;
 
-            // Get the current time
-            const currentTime = new Date().toLocaleTimeString();
+            const currentTime = new Date().toLocaleTimeString();        // Get the current time
 
-            // Set the initial text content
             listItem.innerHTML = `
                 ${device} turned ON at ${currentTime}
                 <span id="time-remaining-${device}" style="margin-left: 10px; color: green; font-weight: bold;"></span>
-            `;
+            `;      // Set the initial text content
 
-            // Append the new list item to the status list
-            statusList.appendChild(listItem);
+            statusList.appendChild(listItem);           // Append the new list item to the status list
         }
 
-        // Clear any existing auto-off timer and countdown interval for this device
-        if (autoOffTimers[device]) {
+        if (autoOffTimers[device]) {        // Clear any existing auto-off timer for this device
             clearTimeout(autoOffTimers[device]);
         }
-        if (countdownIntervals[device]) {
+        if (countdownIntervals[device]) {      // Clear any existing countdown interval for this device
             clearInterval(countdownIntervals[device]);
         }
 
         // Set a new timer to turn off the device after a certain period (e.g., 5 minutes)
-        const autoOffDuration = 300000; // 300,000ms = 5 minutes
+        const autoOffDuration = 300000; //5 mins as test
         const endTime = Date.now() + autoOffDuration;
 
         autoOffTimers[device] = setTimeout(() => {
@@ -236,3 +234,27 @@ function toggleDevice(device, checkbox) {
     ws.send(message);
 }
 
+
+// Function to adjust camera angle
+function adjustCameraAngle(angle) {
+    const display = document.getElementById('camera-angle-display'); // Update the displayed value
+    display.textContent = `${angle}°`;
+
+    console.log(`Camera angle adjusted to: ${angle}°`);
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(`CAMERA_ANGLE:${angle}`);
+    }
+}
+
+// Function to toggle the visibility of the camera angle slider
+function toggleCameraAngleSlider(mode) {
+    const sliderContainer = document.getElementById('camera-angle-slider-container');
+    
+    // If 'manual' mode is selected, show the slider
+    if (mode === 'manual') {
+        sliderContainer.style.display = 'block';
+    } else {
+        sliderContainer.style.display = 'none';  // Hide slider in 'automatic' mode
+    }
+}
