@@ -346,3 +346,101 @@ input:checked + .slider:before {
 #add-crop-form button:hover {
     background-color: #0056b3;
 }
+
+/* /////////////////////Farm controls list///////////////// */
+/* Styling for the device status section */
+#device-status {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    display: none; /* Default hidden state */
+    width: 100%;
+}
+
+/* Styling for the status list container */
+#device-status-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Styling for individual status list items */
+#device-status-list li {
+    background-color: #f0f8ff; /* Light blue background */
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* Alternate row color for device status list */
+#device-status-list li:nth-child(odd) {
+    background-color: #e9f7ef; /* Light green background */
+}
+
+/* Hover effect for device status list items */
+#device-status-list li:hover {
+    background-color: #d1f7e6; /* Light greenish hover color */
+}
+
+/* Add some space between the device status section and any other content below */
+#device-status + * {
+    margin-top: 20px;
+}
+
+/* Styling for the device control history section */
+#device-history {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    display: none; /* Default hidden state */
+    width: 100%;
+}
+
+/* Styling for the history list container */
+#device-history-list {
+    list-style-position: inside; /* Ensure numbers are inside the background */
+    padding: 0;
+    margin: 0;
+    counter-reset: list-counter; /* Reset counter for custom numbering */
+}
+
+/* Styling for individual history list items */
+#device-history-list li {
+    background-color: #fef9e7; /* Light yellow background */
+    padding: 12px;
+    margin: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 1.1em;
+    color: #333;
+    position: relative; /* For custom numbering */
+}
+
+/* Add custom numbers for history list */
+#device-history-list li::before {
+    content: counter(list-counter) ". "; /* Add a number with a dot */
+    counter-increment: list-counter; /* Increment counter */
+    position: absolute;
+    left: 10px; /* Position number inside the list item's padding */
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    color: #444;
+}
+
+/* Alternate row color for device history list */
+#device-history-list li:nth-child(odd) {
+    background-color: #fef4d1; /* Lighter yellow for alternate rows */
+}
+
+/* Hover effect for device history list items */
+#device-history-list li:hover {
+    background-color: #fff7db; /* Slightly darker yellow on hover */
+}

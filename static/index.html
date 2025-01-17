@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>         
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Farming Dashboard</title>
@@ -60,9 +60,14 @@
             </div>
             
             <div id="device-status" style="display: none; margin-top: 20px;">
-                <p id="device-status-text"></p>
-                <p id="device-time"></p>
-            </div>            
+                <h2><i class="fa-solid fa-plug"></i> Device status:</h2>
+                <ul id="device-status-list"></ul>
+            </div>
+            
+            <div id="device-history" style="display: none; margin-top: 20px;">
+                <h2><i class="fa-solid fa-clock"></i> Device Control History</h2>
+                <ol id="device-history-list"></ol>
+            </div>
 
             <div class="section" id="current-crops">
                 <h2><i class="fas fa-leaf"></i> Current Crops</h2>
