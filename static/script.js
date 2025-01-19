@@ -258,3 +258,17 @@ function toggleCameraAngleSlider(mode) {
         sliderContainer.style.display = 'none';  // Hide slider in 'automatic' mode
     }
 }
+
+// Function to handle fertilizer button clicks
+function sendFertilizerMessage(fertilizerType) {
+    // Send the fertilizer type via WebSocket
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(fertilizerType); // Send "N", "P", or "K" based on the button clicked
+        console.log(`Sent fertilizer type: ${fertilizerType}`);
+    }
+}
+
+// Add event listeners for the fertilizer buttons
+document.getElementById('fertilizer-n-button').addEventListener('click', () => sendFertilizerMessage('N'));
+document.getElementById('fertilizer-p-button').addEventListener('click', () => sendFertilizerMessage('P'));
+document.getElementById('fertilizer-k-button').addEventListener('click', () => sendFertilizerMessage('K'));
